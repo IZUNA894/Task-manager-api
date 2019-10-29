@@ -3,18 +3,60 @@ var multer = require('multer');
 var router = express.Router();
 var User= require('../db/user_module');
 var Task =require('../db/task_module');
-
+var sharp = require("sharp");
 var auth = require('../middelware/auth_ware');
 
-// getting a profile pic
+// uploading a profile pic
 var upload=multer({
-  dest:"images"
+  limits:
+  {
+    fileSize:1000000
+  },
+  fileFilter(req,file,cb){
+    if(!file.originalname.match(/\.(jpg|png|jpeg)$/)){
+      return cb(new Error("Please upload a jpg img"));
+    }
+    cb(undefined,true);
+  }
 });
-router.post('/users/me/avatar',upload.single("upload"), async function(req,res)
+router.post('/users/me/avatar',auth,upload.single("upload"), async function(req,res)
 {
-
+   var buffer = await sharp(req.file.buffer).resize({
+     width:250,
+     height:250
+   }).png().toBuffer();
+   req.user.avatar= buffer;
+   await req.user.save();
    res.send("uploaded");
 
+},(err,req,res,next)=>{
+  res.status(400).send({error:err.message});
+});
+
+
+// deleting a profile pic
+router.delete('/users/me/avatar',auth, async function(req,res)
+{
+   req.user.avatar= undefined;
+   await req.user.save();
+   res.send("deleted");
+
+},(err,req,res,next)=>{
+  res.status(400).send({error:err.message});
+});
+
+
+// getting a avatar
+router.get('/users/me/avatar',async function(req,res)
+{
+   res.set("Content-Type","image/jpg");
+   var user = await User.findById("5db71379e308cb343441695c");
+   // var avatar = user.avatar;
+   // console.log(user.avatar);
+   res.send(user.avatar);
+
+},(err,req,res,next)=>{
+  res.status(400).send({error:err.message});
 });
 // getting a user profile...
 router.get('/users/me',auth, async function(req,res)
