@@ -1,11 +1,17 @@
 
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey("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");
+
+
+
+module.exports.sendmail=function(reciever,subject,body){
 const msg = {
-  to: 'samyakjain40422@gmail.com',
+  to: reciever,
   from: 'jainsanyamco@gmail.com',
-  subject: 'Sending a test email',
+  subject: subject,
   text: 'WhatsUP kiddo?',
-  html: '<strong style="color:magenta;">Padh le kuch ...kahli na baith</strong>',
+  html: '<strong style="color:magenta;">' + body + '</strong>',
 };
 sgMail.send(msg);
+console.log("sended");
+};

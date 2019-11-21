@@ -5,7 +5,7 @@ var User= require('../db/user_module');
 var Task =require('../db/task_module');
 var sharp = require("sharp");
 var auth = require('../middelware/auth_ware');
-
+var emailutil = require('../../email');
 // uploading a profile pic
 var upload=multer({
   limits:
@@ -123,6 +123,7 @@ try{
   var user = req.user;
   await user.remove();
   await Task.deleteMany({owner:user._id});
+  emailutil.sendmail(user.email,"welcome to my new app","please share your experience");
   res.send(req.user);
 }
 catch(e)
@@ -138,6 +139,7 @@ router.post('/users', async function(req,res){
    var user = new User(req.body);
    var user = await user.save();
    var token = await user.getAuthToken();
+   emailutil.sendmail(user.email,"welcome to my new app","please share your experience");
 
    res.send({user,token});
  }catch(e)
