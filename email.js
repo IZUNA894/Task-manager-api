@@ -1,6 +1,6 @@
 
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey("");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 
 
@@ -13,5 +13,5 @@ const msg = {
   html: '<strong style="color:magenta;">' + body + '</strong>',
 };
 sgMail.send(msg);
-console.log("sended");
+console.log(reciever);
 };
