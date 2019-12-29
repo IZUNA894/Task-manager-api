@@ -13,5 +13,5 @@ const msg = {
   html: '<strong style="color:magenta;">' + body + '</strong>',
 };
 sgMail.send(msg);
-console.log(reciever);
+//console.log(reciever);
 };

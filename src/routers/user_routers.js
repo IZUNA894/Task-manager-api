@@ -19,7 +19,7 @@ var upload=multer({
     cb(undefined,true);
   }
 });
-router.post('/users/me/avatar',auth,upload.single("upload"), async function(req,res)
+router.post('/users/me/avatar',auth,upload.single("avatar"), async function(req,res)
 {
    var buffer = await sharp(req.file.buffer).resize({
      width:250,
@@ -30,6 +30,7 @@ router.post('/users/me/avatar',auth,upload.single("upload"), async function(req,
    res.send("uploaded");
 
 },(err,req,res,next)=>{
+  //console.log(err.message);
   res.status(400).send({error:err.message});
 });
 
@@ -71,7 +72,7 @@ router.get('/users/me',auth, async function(req,res)
 
    // }
    await  req.user.populate("tasks").execPopulate();
-   console.log( req.user.tasks)
+   //console.log( req.user.tasks)
    res.send(req.user);
 
 });
@@ -107,9 +108,9 @@ router.patch("/users/me" , auth ,async (req, res ) =>{
     await user.save();
    //var user = await User.findByIdAndUpdate(req.params.id,req.body,{new:true, runValidators:true});
    if(!user)
-   res.status(400).send("error")
+   res.status(400).send("error");
 
-   res.send(user);
+   res.status(200).send(user);
  }
  catch(e){
    res.status(400).send(e);
@@ -139,12 +140,12 @@ router.post('/users', async function(req,res){
    var user = new User(req.body);
    var user = await user.save();
    var token = await user.getAuthToken();
-   emailutil.sendmail(user.email,"welcome to my new app","please share your experience");
+  // emailutil.sendmail(user.email,"welcome to my new app","please share your experience");
 
-   res.send({user,token});
+   res.status(201).send({user,token});
  }catch(e)
   {
-    console.log("helllo ji");
+    console.log(e);
     res.status(400).send("error");
   }
 
@@ -154,13 +155,15 @@ router.post('/users', async function(req,res){
 router.post('/users/login', async function(req,res){
  try{
    var user = await User.findByCredentials(req.body.email,req.body.password);
+   //console.log(req.body.password);
+   //console.log(user);
+
    if(!user){
-     //console.log("hey ya");
    throw new Error("unable to login");
    }
    var token = await user.getAuthToken();
 
-   res.send({user,token});
+   res.status(200).send({user,token});
  }
   catch(e)
   {

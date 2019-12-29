@@ -4,8 +4,12 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "env-cmd ./config/dev.env nodemon app"
+    "start": "node index.js",
+    "dev": "env-cmd -f ./config/dev.env nodemon index",
+    "test":"env-cmd -f ./config/test.env jest --watch"
+  },
+  "jest":{
+    "testEnvironment":"node"
   },
   "author": "",
   "license": "ISC",
@@ -21,6 +25,9 @@
   },
   "devDependencies": {
     "env-cmd": "^10.0.1",
-    "nodemon": "^1.19.3"
+    "jest": "^24.9.0",
+    "jira": "^0.9.2",
+    "nodemon": "^1.19.3",
+    "supertest": "^4.0.2"
   }
 }

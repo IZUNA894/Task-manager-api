@@ -54,6 +54,13 @@ var userSchema  = new mongoose.Schema({
   });
   userSchema.pre('save' , async function(next){
     var user = this;
+
+    // var isFound = await User.findOne({email:user.email});
+    // if(isFound){
+    //   console.log(isFound);
+    //   throw new Error("email is taken");
+    //
+    // }
     var hashedPass ="";
     if(user.isModified('password'))
     {
@@ -61,8 +68,13 @@ var userSchema  = new mongoose.Schema({
     //console.log(hashedPass);
     user.password =hashedPass;
   }
+
+
   next();
 });
+
+
+
 
 userSchema.methods.getAuthToken = async function(){
   var user = this;
@@ -79,7 +91,7 @@ userSchema.methods.toJSON = function (){
   delete user.password;
   delete user.__v;
   delete user.avatar;
-  console.log(user);
+  //console.log(user);
   return user;
 }
   userSchema.statics.findByCredentials = async (email,password) =>
@@ -90,7 +102,9 @@ userSchema.methods.toJSON = function (){
       return undefined;
     }
     var isFound = bcrypt.compare(password,user.password);
+    //console.log("value of is found"+ JSON.stringify(isFound));
     if(!isFound){
+      console.log("error thrrownnnnn");
       throw new Error("unable to login");
     }
     return user

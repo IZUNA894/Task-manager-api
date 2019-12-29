@@ -1,4 +1,4 @@
-  var express = require('express');
+var express = require('express');
 require('./src/db/mongoose');
 var UserRouter = require("./src/routers/user_routers");
 var TaskRouter = require("./src/routers/task_routers");
@@ -11,7 +11,7 @@ module.exports=
 
   app.get('/',function(req,res)
   {
-    res.send("hello there");
+    res.send("hi there");
     res.end();
   });
 
