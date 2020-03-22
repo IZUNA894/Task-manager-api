@@ -1,0 +1,33 @@
+{
+  "name": "task_manger",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "env-cmd -f ./config/dev.env nodemon index",
+    "test":"env-cmd -f ./config/test.env jest --watch"
+  },
+  "jest":{
+    "testEnvironment":"node"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@sendgrid/mail": "^6.4.0",
+    "bcryptjs": "^2.4.3",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.7.5",
+    "multer": "^1.4.2",
+    "sharp": "^0.23.2",
+    "validator": "^11.1.0"
+  },
+  "devDependencies": {
+    "env-cmd": "^10.0.1",
+    "jest": "^24.9.0",
+    "jira": "^0.9.2",
+    "nodemon": "^1.19.3",
+    "supertest": "^4.0.2"
+  }
+}
