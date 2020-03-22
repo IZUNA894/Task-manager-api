@@ -59,6 +59,8 @@ router.get('/users/me/avatar',async function(req,res)
 },(err,req,res,next)=>{
   res.status(400).send({error:err.message});
 });
+
+
 // getting a user profile...
 router.get('/users/me',auth, async function(req,res)
 {

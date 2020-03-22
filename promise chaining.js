@@ -1,3 +1,5 @@
+// this file is redundent...
+// its just for practice...no role in working of app
 var add= (num1 , num2) =>{
   return new Promise((resolve ,reject ) => {
 

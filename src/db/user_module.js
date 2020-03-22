@@ -47,20 +47,20 @@ var userSchema  = new mongoose.Schema({
 {
   timestamps:true
 } );
+
+//a virtual field..
+// to show tasks against his user
   userSchema.virtual("tasks",{
     ref:'Task',
     localField:"_id",
     foreignField:"owner"
   });
+
+//function to hashd the password before save
   userSchema.pre('save' , async function(next){
     var user = this;
 
-    // var isFound = await User.findOne({email:user.email});
-    // if(isFound){
-    //   console.log(isFound);
-    //   throw new Error("email is taken");
-    //
-    // }
+    
     var hashedPass ="";
     if(user.isModified('password'))
     {
@@ -75,7 +75,7 @@ var userSchema  = new mongoose.Schema({
 
 
 
-
+//function to get a jwt token
 userSchema.methods.getAuthToken = async function(){
   var user = this;
   var token = await jwt.sign({_id:user._id.toString()},"secretkey");
@@ -84,6 +84,7 @@ userSchema.methods.getAuthToken = async function(){
   return token;
 
 }
+
 userSchema.methods.toJSON = function (){
   var user= this;
   user = user.toObject();
@@ -94,6 +95,8 @@ userSchema.methods.toJSON = function (){
   //console.log(user);
   return user;
 }
+
+//this function is called at time of login
   userSchema.statics.findByCredentials = async (email,password) =>
   {
     var user = await User.findOne({email});
